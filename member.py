@@ -45,7 +45,7 @@ class Member:
         return self.material.E * self.section.A
 
     @property
-    def stiffness_matrix(self) -> np.ndarray:
+    def stiffness(self) -> np.ndarray:
         t1 = self.ea/self.length
         t2 = 12*self.ei/self.length**3
         t3 = 6*self.ei/self.length**2
@@ -59,4 +59,21 @@ class Member:
             [-t1,   0,      0,      t1,     0,      0],
             [0,     -t2,    -t3,    0,      t2,     -t3],
             [0,     t3,     t5,     0,      -t3,    t4]
+        ])
+
+    @property
+    def stiffness_matrix(self) -> np.ndarray:
+        return self.transformation_matrix.T@self.stiffness@self.transformation_matrix
+
+    @property
+    def transformation_matrix(self) -> np.ndarray:
+        l = self.cosine
+        m = self.sine
+        return np.array([
+            [l,     m,  0,  0,  0,  0],
+            [-m,    l,  0,  0,  0,  0],
+            [0,     0,  1,  0,  0,  0],
+            [0,     0,  0,  l,  m,  0],
+            [0,     0,  0,  -m, l,  0],
+            [0,     0,  0,  0,  0,  1]
         ])
