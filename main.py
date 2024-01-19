@@ -46,10 +46,6 @@ class Frame:
             for ig, il in zip(iterable, range(local_k.shape[0])):
                 for jg, jl in zip(iterable, range(local_k.shape[1])):
                     self.global_k[ig, jg] += local_k[il, jl]
-            # print(local_k)
-            # print(member.nodes[0].indices)
-
-        # print(self.global_k)
 
     def solve(self):
         self.DOF = 3 * self.nodes.item_count
@@ -94,20 +90,26 @@ if __name__ == "__main__":
     A = 1
     MOI = 24e-6
 
+    material = Material(E)
+    section = Section(A=A, I=MOI)
+
     n1 = Point(0, 0)
-    n2 = Point(5, 0)
-    n3 = Point(10, 0)
+    n2 = Point(0, 5)
+    n3 = Point(5, 5)
+    n4 = Point(5, 0)
 
-    m1 = Member(n1, n2, material=Material(E), section=Section(A=A, I=MOI))
-    m2 = Member(n2, n3, material=Material(E), section=Section(A=A, I=MOI))
+    m1 = Member(n1, n2, material=material, section=section)
+    m2 = Member(n2, n3, material=material, section=section)
+    m3 = Member(n3, n4, material=material, section=section)
 
-    l1 = Load(0, -20, 0, n2)
+    l1 = Load(20, 20, 0, n2)
+    l2 = Load(30, -30, 0, n3)
 
-    s1 = FixedSupport(n1)
-    s2 = RollerSupport(n3)
+    s1 = HingedSupport(n1)
+    s2 = RollerSupport(n4)
 
-    frame = Frame(n1, n2, n3)
-    frame.add_members(m1, m2)
+    frame = Frame(n1, n2, n3, n4)
+    frame.add_members(m1, m2, m3)
     frame.add_supports(s1, s2)
-    frame.add_loads(l1)
+    frame.add_loads(l1, l2)
     frame.solve()
