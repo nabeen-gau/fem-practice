@@ -1,14 +1,14 @@
 from point import Point
 from support import Support, FixedSupport, HingedSupport, RollerSupport
-from load import Load
+from load import NodalLoad
 
 
 class PointCollection:
     id: list[int] = []
     points: list[Point] = []
     collection: dict[int: Point] = {}
-    loads: list[Load] = []
-    displacements: list[Load] = []
+    loads: list[NodalLoad] = []
+    displacements: list[NodalLoad] = []
     supports: list[Support] = []
     dof_ids: list[tuple[int]] = []
 
@@ -34,7 +34,7 @@ class PointCollection:
     def item_count(self):
         return self.id[-1]+1
 
-    def add_loads(self, *loads: Load):
+    def add_loads(self, *loads: NodalLoad):
         for load in loads:
             self.loads[self.get_index(load.position)] = load
 

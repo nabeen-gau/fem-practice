@@ -3,7 +3,7 @@ from point import Point
 from material import Material
 from section import Section
 from support import Support, RollerSupport, HingedSupport, FixedSupport
-from load import Load
+from load import NodalLoad
 # from displacement import Displacement
 # from node import Node
 from member import Member
@@ -14,7 +14,7 @@ class Frame:
     members: list[Member] = []
     DOF: int = 0
     nodes: PointCollection = None
-    loads: list[Load] = []
+    loads: list[NodalLoad] = []
 
     def __init__(self, *nodes):
         self.nodes = PointCollection(*nodes)
@@ -80,7 +80,7 @@ class Frame:
         self.supports = supports
         self.nodes.add_supports(*supports)
 
-    def add_loads(self, *loads: Load) -> None:
+    def add_loads(self, *loads: NodalLoad) -> None:
         self.loads = loads
         self.nodes.add_loads(*loads)
 
@@ -102,8 +102,8 @@ if __name__ == "__main__":
     m2 = Member(n2, n3, material=material, section=section)
     m3 = Member(n3, n4, material=material, section=section)
 
-    l1 = Load(20, 20, 0, n2)
-    l2 = Load(30, -30, 0, n3)
+    l1 = NodalLoad(20, 20, 0, n2)
+    l2 = NodalLoad(30, -30, 0, n3)
 
     s1 = HingedSupport(n1)
     s2 = RollerSupport(n4)

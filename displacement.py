@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from load import Load
+from load import NodalLoad
 
 
 @dataclass

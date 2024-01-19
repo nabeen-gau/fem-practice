@@ -1,11 +1,11 @@
 from point import Point
-from load import Load
+from load import NodalLoad
 from support import Support
 
 
 class Node:
     point: Point
-    load: Load
+    load: NodalLoad
     support: Support
     indices: tuple[int]
 
